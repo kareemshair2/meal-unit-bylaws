@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    لائحة MEAL — محرك العرض والتفاعل
    ============================================================ */
 'use strict';
@@ -26,7 +26,7 @@ function renderPreamble() {
 }
 
 /* تمييز «أولًا:» وما بعدها كتل عمودية داخل المادة */
-const ORDINAL = /^(أولًا|ثانيًا|ثالثًا|رابعًا|خامسًا|سادسًا|سابعًا|ثامنًا):\s*([^:]+?):\s*(.*)$/;
+const ORDINAL = /^(أولًا|ثانيًا|ثالثًا|رابعًا|خامسًا|سادسًا|سابعًا|ثامنًا|تاسعًا|عاشرًا):\s*(?:([^:]+?):\s*)?(.*)$/;
 
 function renderArticleBody(raw) {
   const blocks = raw.split(/\n\n+/);
@@ -37,7 +37,8 @@ function renderArticleBody(raw) {
     if (pillarLines.length && pillarLines.length === lines.length) {
       html += pillarLines.map(l => {
         const m = l.match(ORDINAL);
-        return `<div class="pillar"><b>${escapeHTML(m[1])} · ${escapeHTML(m[2])}</b><span>${escapeHTML(m[3])}</span></div>`;
+        const bold = m[2] ? `${m[1]} · ${m[2]}` : m[1];
+        return `<div class="pillar"><b>${escapeHTML(bold)}</b><span>${escapeHTML(m[3])}</span></div>`;
       }).join('');
     } else {
       html += `<p>${lines.map(escapeHTML).join('<br>')}</p>`;
@@ -348,7 +349,7 @@ function runSearch(q) {
   const list = $('#srList'), count = $('#srCount'), empty = $('#srEmpty');
   list.innerHTML = '';
   if (nq.length < 2) {
-    count.textContent = 'اكتب حرفين على الأقل للبحث في المواد المئة والديباجة والملحقين';
+    count.textContent = 'اكتب حرفين على الأقل للبحث في مواد اللائحة والديباجة والملحقين';
     empty.hidden = true;
     return;
   }
@@ -402,7 +403,7 @@ function openSearch() {
   const input = $('#globalSearch');
   input.value = '';
   $('#srList').innerHTML = '';
-  $('#srCount').textContent = 'اكتب حرفين على الأقل للبحث في المواد المئة والديباجة والملحقين';
+  $('#srCount').textContent = 'اكتب حرفين على الأقل للبحث في مواد اللائحة والديباجة والملحقين';
   $('#srEmpty').hidden = true;
   requestAnimationFrame(() => input.focus());
 }
